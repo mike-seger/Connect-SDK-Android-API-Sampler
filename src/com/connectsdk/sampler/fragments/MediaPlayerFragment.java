@@ -634,44 +634,12 @@ public class MediaPlayerFragment extends BaseFragment {
         }
     }
 
-    private MediaInfo sintelVideo1=new MediaInfo(
- //           "http://www.connectsdk.com/files/8913/9657/0225/test_video.mp4",
-    		"http://mirrorblender.top-ix.org/movies/sintel-1024-surround.mp4",
-            "http://www.connectsdk.com/files/7313/9657/0225/test_video_icon.jpg",
-            "Sintel Trailer",
-            "Blender Open Movie Project",
-            "video/mp4" );
-
-    private MediaInfo sintelVideo=new MediaInfo(
- //           "http://www.connectsdk.com/files/8913/9657/0225/test_video.mp4",
-    		//"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-manifest.mpd",
-    		//http://yt-dash-mse-test.commondatastorage.googleapis.com/media/car-20120827-manifest.mpd
-    		//http://rdmedia.bbc.co.uk/dash/ondemand/bbb/avc3/1/client_manifest-common_init.mpd
-    		//http://rdmedia.bbc.co.uk/dash/ondemand/bbb/avc3/1/client_manifest-audio.mpd
-    		//"http://rdmedia.bbc.co.uk/dash/ondemand/bbb/avc3/1/client_manifest-v1-a2.mpd",
-    		//"http://188.40.60.38/sintel/sintel-1024-stereo.mp4",
-    		"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
+    private MediaInfo localVideo=new MediaInfo(
+     		"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
             null,
             "Sintel",
             "1024-stereo",
             "video/mp4" );
-
-    private MediaInfo localVideo=sintelVideo;
-
- /*   private MediaInfo localVideo=new MediaInfo(
-            "http://192.168.0.172/video/rango%20(2011).mp4",
-            "http://192.168.0.172/video/rango%20(2011)-poster.jpg",
-            "Rango (2011)",
-            "Rango Tablet Version",
-            "video/mp4" );*/
-/*
-    private MediaInfo localAudio=new MediaInfo(
-            "http://192.168.0.172/audio/goa%20trance%20-%20best%20of%20141%20-%20142%20bpm.mp3",
-            null,
-            "goa trance - best of 141 - 142 bpm",
-            "goa trance - best of 141 - 142 bpm",
-            "audio/mp3" );
-*/
 
     private MediaInfo localAudio=new MediaInfo(
             "https://archive.org/download/pcast158/pcast158.mp3",
