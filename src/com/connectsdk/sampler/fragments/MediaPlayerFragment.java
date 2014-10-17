@@ -203,8 +203,13 @@ public class MediaPlayerFragment extends BaseFragment {
              		String description = "Blender Open Movie Project";
              		String icon = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/videoIcon.jpg";
  */            		
-            		getMediaPlayer().playMedia(localVideo.mediaURL, localVideo.mimeType, localVideo.title, localVideo.description, localVideo.iconURL, false, new MediaPlayer.LaunchListener() {
-						
+             		MediaInfo videoInfo=localVideo;
+	         		String clz=getMediaPlayer().getClass().getName().toLowerCase();
+	         		if(clz.indexOf("airplay")>0) {
+	         			videoInfo=localVideoHls;
+	         		}
+
+            		getMediaPlayer().playMedia(videoInfo.mediaURL, videoInfo.mimeType, videoInfo.title, videoInfo.description, videoInfo.iconURL, false, new MediaPlayer.LaunchListener() {
              			public void onSuccess(MediaLaunchObject object) {
              				launchSession = object.launchSession;
 							mMediaControl = object.mediaControl;
@@ -634,12 +639,22 @@ public class MediaPlayerFragment extends BaseFragment {
         }
     }
 
-    private MediaInfo localVideo=new MediaInfo(
+    private MediaInfo localVideoHls=new MediaInfo(
      		"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
             null,
+            "Test Video",
+            "bip bop",
+            //"audio/x-mpegurl"
+            "video/mp4"
+    );
+    
+    private MediaInfo localVideo=new MediaInfo(
+    		 "http://188.40.60.38/sintel/sintel-1024-stereo.mp4",
+            null,
             "Sintel",
-            "1024-stereo",
-            "video/mp4" );
+            "Full Mocie",
+            "video/mp4"
+    );
 
     private MediaInfo localAudio=new MediaInfo(
             "https://archive.org/download/pcast158/pcast158.mp3",
