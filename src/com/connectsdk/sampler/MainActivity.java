@@ -143,6 +143,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     	DiscoveryManager.getInstance().setPairingLevel(PairingLevel.ON);
 		DiscoveryManager.getInstance().start();
+		
+		mViewPager.setKeepScreenOn(true);
     }
 
     public List<ConnectableDevice> getImageDevices() {
