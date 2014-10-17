@@ -107,8 +107,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 		}
 
 		@Override
-		public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {
-			
+		public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {	
 		}
 	};
 	

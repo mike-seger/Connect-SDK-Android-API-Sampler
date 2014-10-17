@@ -679,12 +679,4 @@ public class MediaPlayerFragment extends BaseFragment {
             "Beethoven: Sonatas & Concerto",
             null,
             "audio/mp3" );
-    	
-    private MediaInfo localAudio1=new MediaInfo(
-            "http://192.168.0.172:32469/object/73b75c882d2bcc61d416/file.wav",
-            "http://192.168.0.172:32469/proxy/6a1593ec15d46a228bf4/icon.jpg",
-            "goa trance - best of 141 - 142 bpm",
-            "goa trance - best of 141 - 142 bpm",
-            "audio/wav" );
-
 }
