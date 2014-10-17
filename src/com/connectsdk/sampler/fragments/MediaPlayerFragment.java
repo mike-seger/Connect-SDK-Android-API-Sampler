@@ -197,13 +197,13 @@ public class MediaPlayerFragment extends BaseFragment {
              			disableMedia();
              		}
              		
-             		String videoPath = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/video.mp4";
+ /*            		String videoPath = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/video.mp4";
              		String mimeType = "video/mp4";
              		String title = "Sintel Trailer";
              		String description = "Blender Open Movie Project";
              		String icon = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/videoIcon.jpg";
-             		
-             		getMediaPlayer().playMedia(videoPath, mimeType, title, description, icon, false, new MediaPlayer.LaunchListener() {
+ */            		
+            		getMediaPlayer().playMedia(localVideo.mediaURL, localVideo.mimeType, localVideo.title, localVideo.description, localVideo.iconURL, false, new MediaPlayer.LaunchListener() {
 						
              			public void onSuccess(MediaLaunchObject object) {
              				launchSession = object.launchSession;
@@ -236,14 +236,14 @@ public class MediaPlayerFragment extends BaseFragment {
 						disableMedia();
 					}
 					
-					String mediaURL = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/audio.mp3";
+/*					String mediaURL = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/audio.mp3";
 					String iconURL = "http://ec2-54-201-108-205.us-west-2.compute.amazonaws.com/samples/media/audioIcon.jpg";
 					String title = "The Song that Doesn't End";
 					String description = "Lamb Chop's Play Along";
 					String mimeType = "audio/mp3";
 					boolean shouldLoop = false;
-					
-					getMediaPlayer().playMedia(mediaURL, mimeType, title, description, iconURL, shouldLoop, new MediaPlayer.LaunchListener() {
+*/					
+					getMediaPlayer().playMedia(localAudio.mediaURL, localAudio.mimeType, localAudio.title, localAudio.description, localAudio.iconURL, false, new MediaPlayer.LaunchListener() {
 						
 						@Override
 						public void onError(ServiceCommandError error) {
@@ -605,4 +605,86 @@ public class MediaPlayerFragment extends BaseFragment {
 
 		return time;
 	}
+	
+	
+    private class MediaInfo {
+        private final String mediaURL;
+        private final String iconURL;
+        private final String title ;
+        private final String description;
+        private final String mimeType;
+
+        private MediaInfo(String mediaURL, String iconURL, String title, String description, String mimeType) {
+            this.mimeType = mimeType;
+            this.mediaURL = mediaURL;
+            this.iconURL = iconURL;
+            this.title = title;
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+            return "MediaInfo{" +
+                    "mediaURL='" + mediaURL + '\'' +
+                    ", iconURL='" + iconURL + '\'' +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", mimeType='" + mimeType + '\'' +
+                    '}';
+        }
+    }
+
+    private MediaInfo sintelVideo1=new MediaInfo(
+ //           "http://www.connectsdk.com/files/8913/9657/0225/test_video.mp4",
+    		"http://mirrorblender.top-ix.org/movies/sintel-1024-surround.mp4",
+            "http://www.connectsdk.com/files/7313/9657/0225/test_video_icon.jpg",
+            "Sintel Trailer",
+            "Blender Open Movie Project",
+            "video/mp4" );
+
+    private MediaInfo sintelVideo=new MediaInfo(
+ //           "http://www.connectsdk.com/files/8913/9657/0225/test_video.mp4",
+    		//"http://yt-dash-mse-test.commondatastorage.googleapis.com/media/feelings_vp9-20130806-manifest.mpd",
+    		//http://yt-dash-mse-test.commondatastorage.googleapis.com/media/car-20120827-manifest.mpd
+    		//http://rdmedia.bbc.co.uk/dash/ondemand/bbb/avc3/1/client_manifest-common_init.mpd
+    		//http://rdmedia.bbc.co.uk/dash/ondemand/bbb/avc3/1/client_manifest-audio.mpd
+    		//"http://rdmedia.bbc.co.uk/dash/ondemand/bbb/avc3/1/client_manifest-v1-a2.mpd",
+    		//"http://188.40.60.38/sintel/sintel-1024-stereo.mp4",
+    		"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
+            null,
+            "Sintel",
+            "1024-stereo",
+            "video/mp4" );
+
+    private MediaInfo localVideo=sintelVideo;
+
+ /*   private MediaInfo localVideo=new MediaInfo(
+            "http://192.168.0.172/video/rango%20(2011).mp4",
+            "http://192.168.0.172/video/rango%20(2011)-poster.jpg",
+            "Rango (2011)",
+            "Rango Tablet Version",
+            "video/mp4" );*/
+/*
+    private MediaInfo localAudio=new MediaInfo(
+            "http://192.168.0.172/audio/goa%20trance%20-%20best%20of%20141%20-%20142%20bpm.mp3",
+            null,
+            "goa trance - best of 141 - 142 bpm",
+            "goa trance - best of 141 - 142 bpm",
+            "audio/mp3" );
+*/
+
+    private MediaInfo localAudio=new MediaInfo(
+            "https://archive.org/download/pcast158/pcast158.mp3",
+            "http://www.csudh.edu/oliver/beetport/plate4.jpg",
+            "Beethoven: Sonatas & Concerto",
+            null,
+            "audio/mp3" );
+    	
+    private MediaInfo localAudio1=new MediaInfo(
+            "http://192.168.0.172:32469/object/73b75c882d2bcc61d416/file.wav",
+            "http://192.168.0.172:32469/proxy/6a1593ec15d46a228bf4/icon.jpg",
+            "goa trance - best of 141 - 142 bpm",
+            "goa trance - best of 141 - 142 bpm",
+            "audio/wav" );
+
 }
