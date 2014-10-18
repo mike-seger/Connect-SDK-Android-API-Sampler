@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,29 +49,23 @@ import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.sessions.LaunchSession;
 
 public class MediaPlaylistFragment extends BaseFragment {
-	public Button videoButton;
-    public Button playButton;
-    public Button pauseButton;
-    public Button stopButton;
-    public Button rewindButton;
-    public Button fastForwardButton;
-    public Button closeButton;
+	private Button playButton;
+    private Button pauseButton;
+    private Button stopButton;
+    private Button rewindButton;
+    private Button fastForwardButton;
+    private Button closeButton;
     
-    public LaunchSession launchSession;
+    private LaunchSession launchSession;
     
-    public TextView positionTextView;
-    public TextView durationTextView;
-    public SeekBar mSeekBar;
-    public boolean mIsUserSeeking;
-    public SeekBar mVolumeBar;
+    private TextView positionTextView;
+    private TextView durationTextView;
+    private SeekBar mSeekBar;
+    private SeekBar mVolumeBar;
     private ListView listView;
 
-    public boolean mSeeking;
-    public Runnable mRefreshRunnable;
-    public static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
-    public Handler mHandler;
-    public long totalTimeDuration;
-    public boolean mIsGettingPlayPosition;
+    private static final int REFRESH_INTERVAL_MS = (int) TimeUnit.SECONDS.toMillis(1);
+    private long totalTimeDuration;
     
     private MediaControl mMediaControl = null;
     
@@ -81,10 +74,6 @@ public class MediaPlaylistFragment extends BaseFragment {
     public MediaPlaylistFragment(Context context)
     {
         super(context);
-        
-        mIsUserSeeking = false;
-        mSeeking = false;
-        mIsGettingPlayPosition = false;
     }
 
 	@Override
@@ -93,7 +82,6 @@ public class MediaPlaylistFragment extends BaseFragment {
 		View rootView = inflater.inflate(
 				R.layout.fragment_media_playlist, container, false);
 
-		videoButton = (Button) rootView.findViewById(R.id.videoButton);
         playButton = (Button) rootView.findViewById(R.id.playButton);
         pauseButton = (Button) rootView.findViewById(R.id.pauseButton);
         stopButton = (Button) rootView.findViewById(R.id.stopButton);
@@ -107,8 +95,7 @@ public class MediaPlaylistFragment extends BaseFragment {
         mVolumeBar = (SeekBar) rootView.findViewById(R.id.volume_seek_bar);
         
         buttons = new Button[] {
-        	videoButton, 
-        	playButton, 
+         	playButton, 
         	pauseButton, 
         	stopButton, 
         	rewindButton, 
@@ -116,24 +103,23 @@ public class MediaPlaylistFragment extends BaseFragment {
         	closeButton
         };
 
-        mHandler = new Handler();
-
         listView = (ListView) rootView.findViewById(R.id.listview);
         
         String baseUrl="http://188.40.60.38/video/";
         List<MediaInfo> list=new ArrayList<>();
+        list.add(new MediaInfo("https://www.youtube.com/watch?v=VN-KIlsxxOw",  null, "YoutUbe 1", "bip bop", "video/mp4"));
         list.add(new MediaInfo("http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",  null, "Test Video", "bip bop", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"sintel/sintel-1024-stereo.mp4", null, "Sintel", "Full Mocie", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/bass_demanding_tracks_for_your_system.mp4", null, "bass demanding tracks for your system", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/stereo_amp_tv_audio_video_sync_test_av_system_test.mp4", null, "stereo amp tv audio video sync test av system test", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/sheep_in_the_island_1_hd.mp4", null, "sheep in the island 1 hd", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/test_tv_full_hd_1920_x_1080p_2d_3d_sbs.mp4", null, "test tv full hd 1920 x 1080p 2d 3d sbs", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/bbc_hd_audio_sync_test.mp4", null, "bbc hd audio sync test", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/big_buck_bunny_animation_1080p.mp4", null, "big buck bunny animation 1080p", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/five_minute_sync_test.mp4", null, "five minute sync test", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/planet_earth_seen_from_space_full_hd_1080p.mp4", null, "planet earth seen from space full hd 1080p", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/audio_visual_system_test.mp4", null, "audio visual system test", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"small/hearing_test_hd.mp4", null, "hearing test hd", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/bass_demanding_tracks_for_your_system.mp4", null, "bass demanding tracks for your system", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/stereo_amp_tv_audio_video_sync_test_av_system_test.mp4", null, "stereo amp tv audio video sync test av system test", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/sheep_in_the_island_1_hd.mp4", null, "sheep in the island 1 hd", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/test_tv_full_hd_1920_x_1080p_2d_3d_sbs.mp4", null, "test tv full hd 1920 x 1080p 2d 3d sbs", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/bbc_hd_audio_sync_test.mp4", null, "bbc hd audio sync test", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/big_buck_bunny_animation_1080p.mp4", null, "big buck bunny animation 1080p", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/five_minute_sync_test.mp4", null, "five minute sync test", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/planet_earth_seen_from_space_full_hd_1080p.mp4", null, "planet earth seen from space full hd 1080p", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/audio_visual_system_test.mp4", null, "audio visual system test", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/hearing_test_hd.mp4", null, "hearing test hd", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"sintel/sintel-1024-stereo.mp4", null, "sintel 1024 stereo", "", "video/mp4"));
 
         final StableArrayAdapter adapter = new StableArrayAdapter(container.getContext(), android.R.layout.simple_list_item_1, list);
@@ -152,22 +138,30 @@ public class MediaPlaylistFragment extends BaseFragment {
 					disableMedia();
 				}
 
-				getMediaPlayer().playMedia(item.mediaURL, item.mimeType,
-						item.title, item.description, item.iconURL, false,
-						new MediaPlayer.LaunchListener() {
-							public void onSuccess(MediaLaunchObject object) {
-								launchSession = object.launchSession;
-								mMediaControl = object.mediaControl;
-								stopUpdating();
-								enableMedia();
-							}
-
-							@Override
-							public void onError(ServiceCommandError error) {
-							}
-						});
+				MediaPlayer mediaPlayer=getMediaPlayer();
+				if(mediaPlayer==null && getTv()!=null) {
+					mediaPlayer=getTv().getMediaPlayer();
+				}
+				if(mediaPlayer!=null) {
+					mediaPlayer.playMedia(item.mediaURL, item.mimeType,
+							item.title, item.description, item.iconURL, false,
+							new MediaPlayer.LaunchListener() {
+								public void onSuccess(MediaLaunchObject object) {
+									launchSession = object.launchSession;
+									mMediaControl = object.mediaControl;
+									stopUpdating();
+									enableMedia();
+								}
+	
+								@Override
+								public void onError(ServiceCommandError error) {
+								}
+							});
+				}
 			}
 		});
+		
+		disableList();
         
         return rootView;
 	}
@@ -177,8 +171,11 @@ public class MediaPlaylistFragment extends BaseFragment {
 		super.setTv(tv);
 		
 		if (tv == null) {
+			disableList();
 			stopUpdating();
 			mMediaControl = null;
+		} else {
+			enableList();
 		}
 	}
     
@@ -192,46 +189,6 @@ public class MediaPlaylistFragment extends BaseFragment {
     public void enableButtons()
     {    	 
     	totalTimeDuration = -1;
-    	
-    	if ( getTv().hasCapability(MediaPlayer.Display_Video) ) {
-    		listView.setEnabled(true);
-    		videoButton.setEnabled(true);
-    		videoButton.setOnClickListener(new View.OnClickListener() {
-
-    			@Override
-    			public void onClick(View view) {
-             		if (launchSession != null) {
-             			launchSession.close(null);
-             			launchSession = null;
-             			stopUpdating();
-             			disableMedia();
-             		}
-             		
-             		MediaInfo videoInfo=localVideo;
-	         		String clz=getMediaPlayer().getClass().getName().toLowerCase();
-	         		if(clz.indexOf("airplay")>0) {
-	         			videoInfo=localVideoHls;
-	         		}
-
-            		getMediaPlayer().playMedia(videoInfo.mediaURL, videoInfo.mimeType, videoInfo.title, videoInfo.description, videoInfo.iconURL, false, new MediaPlayer.LaunchListener() {
-             			public void onSuccess(MediaLaunchObject object) {
-             				launchSession = object.launchSession;
-							mMediaControl = object.mediaControl;
-							stopUpdating();
-							enableMedia();
-						}
-						
-						@Override
-						public void onError(ServiceCommandError error) {
-						}
-             		});
-    			}
-    		});
-    	}
-    	else {
-    		disableButton(videoButton);
-           	listView.setEnabled(false);
-    	}
     	    	
     	mVolumeBar.setEnabled(getTv().hasCapability(VolumeControl.Volume_Set));
     	mVolumeBar.setOnSeekBarChangeListener(volumeListener);
@@ -260,21 +217,17 @@ public class MediaPlaylistFragment extends BaseFragment {
 	
 	protected void onSeekBarMoved(long position) {
 		if (mMediaControl != null && getTv().hasCapability(MediaControl.Seek)) {
-			mSeeking = true;
-			
     		mMediaControl.seek(position, new ResponseListener<Object>() {
 				
 				@Override
 				public void onSuccess(Object response) {
 					Log.d("LG", "Success on Seeking");
-					mSeeking = false;
 					startUpdating();
 				}
 				
 				@Override
 				public void onError(ServiceCommandError error) {
 					Log.w("Connect SDK", "Unable to seek: " + error.getCode());
-					mSeeking = false;
 					startUpdating();
 				}
 			});
@@ -301,8 +254,7 @@ public class MediaPlaylistFragment extends BaseFragment {
         if (getTv().hasCapability(MediaControl.PlayState_Subscribe)) {
         	mMediaControl.subscribePlayState(playStateListener);
         } else {
-        	mMediaControl.getDuration(durationListener);
-        	
+        	mMediaControl.getDuration(durationListener);	
         	startUpdating();
         }
        	
@@ -328,7 +280,17 @@ public class MediaPlaylistFragment extends BaseFragment {
        	positionTextView.setText("--:--:--");
        	durationTextView.setText("--:--:--");
        	
-       	totalTimeDuration = -1;
+       	totalTimeDuration = -1;       	
+	}
+	
+	private void enableList() {
+		listView.setEnabled(true);
+	}
+	
+	private void disableList() {
+		listView.setEnabled(false);
+       	listView.clearChoices();
+       	listView.requestLayout();
 	}
 	
 	public View.OnClickListener playListener = new View.OnClickListener() {
@@ -420,14 +382,12 @@ public class MediaPlaylistFragment extends BaseFragment {
 		
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
-            mIsUserSeeking = false;
             mSeekBar.setSecondaryProgress(0);
             onSeekBarMoved(seekBar.getProgress());					
 		}
 		
 		@Override
 		public void onStartTrackingTouch(SeekBar seekBar) {
-            mIsUserSeeking = true;
             mSeekBar.setSecondaryProgress(seekBar.getProgress());					
             stopUpdating();
 		}
@@ -476,7 +436,6 @@ public class MediaPlaylistFragment extends BaseFragment {
 			
 			switch (playState) {
 			case Playing:
-//				if (!mSeeking)
 					startUpdating();
 
 				if (mMediaControl != null && getTv().hasCapability(MediaControl.Duration)) {
@@ -593,22 +552,6 @@ public class MediaPlaylistFragment extends BaseFragment {
             return title;
         }
     }
-
-    private MediaInfo localVideoHls=new MediaInfo(
-     		"http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",
-            null,
-            "Test Video",
-            "bip bop",
-            "video/mp4"
-    );
-    
-    private MediaInfo localVideo=new MediaInfo(
-    		"http://188.40.60.38/sintel/sintel-1024-stereo.mp4",
-            null,
-            "Sintel",
-            "Full Mocie",
-            "video/mp4"
-    );
     
     private class StableArrayAdapter extends ArrayAdapter<MediaInfo> {
         HashMap<MediaInfo, Integer> mIdMap = new HashMap<MediaInfo, Integer>();
