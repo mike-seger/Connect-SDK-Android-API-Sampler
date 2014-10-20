@@ -11,6 +11,9 @@
 
 package com.connectsdk.sampler.fragments;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +78,88 @@ public class MediaPlaylistFragment extends BaseFragment {
     {
         super(context);
     }
+	
+	private List<String> readUrl(final String urlString) {
+		final List<String> lines=new ArrayList<>();
+		Thread t=new Thread() {
+			public void run() {
+				try {
+				    URL url = new URL(urlString);
+				    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+				    String line;
+				    while ((line = in.readLine()) != null) {
+				    	lines.add(line);
+				    }
+				    in.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return lines;
+	}
+	
+	private String emptyTokenAsNull(String token) {
+		if(token==null) {
+			return null;
+		}
+		token=token.trim();
+		if(token.length()==0) {
+			return null;
+		}
+		return token;
+	}
+	
+	private MediaInfo parseMediaInfo(String mediaInfoString) {
+		String mediaURL=null;
+		String iconURL=null;
+		String title=null;
+		String description="";
+		String mimeType="video/mp4";
+		
+		String [] tokens=mediaInfoString.split("\t");
+		mediaURL=tokens[0];
+		if(tokens.length>1) {
+			iconURL=emptyTokenAsNull(tokens[1]);
+		}
+		
+		if(tokens.length>2) {
+			title=emptyTokenAsNull(tokens[2]);
+		}
+		
+		if(tokens.length>3) {
+			description=emptyTokenAsNull(tokens[3]);
+		}
+		
+		if(tokens.length>4) {
+			mimeType=emptyTokenAsNull(tokens[4]);
+		}
+		
+		if(mediaURL==null) {
+			return null;
+		}
+		if(title==null) {
+			title=mediaURL;
+		}
+		return new MediaInfo(mediaURL, iconURL, title, description, mimeType);
+	}
+	
+	private List<MediaInfo> parseMediaInfo(List<String> mediaInfoStrings) {
+		List<MediaInfo> mediaInfoList=new ArrayList<>();
+		for(String mediaInfoString : mediaInfoStrings) {
+			MediaInfo mediaInfo=parseMediaInfo(mediaInfoString);
+			if(mediaInfo!=null) {
+				mediaInfoList.add(mediaInfo);
+			}
+		}
+		return mediaInfoList;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,23 +190,32 @@ public class MediaPlaylistFragment extends BaseFragment {
 
         listView = (ListView) rootView.findViewById(R.id.listview);
         
-        String baseUrl="http://188.40.60.38/video/";
+        String baseUrl="http://188.40.60.38/mediatest/";
         List<MediaInfo> list=new ArrayList<>();
-        list.add(new MediaInfo("https://www.youtube.com/watch?v=VN-KIlsxxOw",  null, "YoutUbe 1", "bip bop", "video/mp4"));
-        list.add(new MediaInfo("http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8",  null, "Test Video", "bip bop", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/bipbop/bipbopall.m3u8",  null, "BipBop Test Video (HLS)", "bip bop", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"sintel/sintel-1024-stereo.mp4", null, "Sintel", "Full Mocie", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/bass_demanding_tracks_for_your_system.mp4", null, "bass demanding tracks for your system", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/stereo_amp_tv_audio_video_sync_test_av_system_test.mp4", null, "stereo amp tv audio video sync test av system test", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"airplay/sheep_in_the_island_1_hd.mp4", null, "sheep in the island 1 hd", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/sheep_in_the_island_hd.mp4", null, "sheep in the island hd", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/test_tv_full_hd_1920_x_1080p_2d_3d_sbs.mp4", null, "test tv full hd 1920 x 1080p 2d 3d sbs", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"airplay/bbc_hd_audio_sync_test.mp4", null, "bbc hd audio sync test", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/big_buck_bunny_animation_1080p.mp4", null, "big buck bunny animation 1080p", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/five_minute_sync_test.mp4", null, "five minute sync test", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/planet_earth_seen_from_space_full_hd_1080p.mp4", null, "planet earth seen from space full hd 1080p", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/audio_visual_system_test.mp4", null, "audio visual system test", "", "video/mp4"));
         list.add(new MediaInfo(baseUrl+"airplay/hearing_test_hd.mp4", null, "hearing test hd", "", "video/mp4"));
-        list.add(new MediaInfo(baseUrl+"sintel/sintel-1024-stereo.mp4", null, "sintel 1024 stereo", "", "video/mp4"));
-
+        list.add(new MediaInfo("http://www-itec.uni-klu.ac.at/dash/js/content/bunny_ibmff_720.mpd", null, "big buck bunny @ 720p MPD", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_brilliant.mp4", null, "nostrum - brilliant (video)", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_excess.mp4", null, "nostrum - excess (video)", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_monastery.mp4", null, "nostrum - monastery (video)", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_polaris.mp4", null, "nostrum - polaris (video)", "", "video/mp4"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_brilliant.m4a", null, "nostrum - brilliant (audio)", "", "audio/m4a"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_excess.m4a", null, "nostrum - excess (audio)", "", "audio/m4a"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_monastery.m4a", null, "nostrum - monastery (audio)", "", "audio/m4a"));
+        list.add(new MediaInfo(baseUrl+"airplay/nostrum_-_polaris.m4a", null, "nostrum - polaris (audio)", "", "audio/m4a"));
+        list.add(new MediaInfo(baseUrl+"airplay/segmenter/mixes/goa_saga_chapter_120_125/stream_multi.m3u8", null, "goa saga - chapter 120 - 125 bpm (audio)", "", "audio/m4a"));
+      
+        list.addAll(parseMediaInfo(readUrl(baseUrl+"moremedia.txt")));
+        
         final StableArrayAdapter adapter = new StableArrayAdapter(container.getContext(), android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
 

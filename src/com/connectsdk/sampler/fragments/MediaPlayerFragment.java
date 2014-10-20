@@ -649,7 +649,7 @@ public class MediaPlayerFragment extends BaseFragment {
     );
     
     private MediaInfo localVideo=new MediaInfo(
-    		 "http://188.40.60.38/video/sintel/sintel-1024-stereo.mp4",
+    		 "http://188.40.60.38/mediatest/sintel/sintel-1024-stereo.mp4",
             null,
             "Sintel",
             "Full Mocie",
