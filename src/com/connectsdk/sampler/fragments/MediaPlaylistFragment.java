@@ -329,6 +329,7 @@ public class MediaPlaylistFragment extends BaseFragment {
 	}
 	
 	public void enableMedia() {
+		enableList();
     	playButton.setEnabled(getTv().hasCapability(MediaControl.Play));
     	pauseButton.setEnabled(getTv().hasCapability(MediaControl.Pause));
     	stopButton.setEnabled(getTv().hasCapability(MediaControl.Stop));
@@ -374,7 +375,8 @@ public class MediaPlaylistFragment extends BaseFragment {
        	positionTextView.setText("--:--:--");
        	durationTextView.setText("--:--:--");
        	
-       	totalTimeDuration = -1;       	
+       	totalTimeDuration = -1;      
+       	disableList();
 	}
 	
 	private void enableList() {
